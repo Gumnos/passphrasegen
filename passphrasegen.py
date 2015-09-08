@@ -5,7 +5,7 @@ import re
 import sys
 from copy import copy
 from functools import partial
-from optparse import OptionParser, Option, OptionValueError
+from optparse import OptionParser
 
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
