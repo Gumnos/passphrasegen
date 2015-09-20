@@ -25,6 +25,17 @@ EXCLUSIONS = [
     ("punct", lambda s: punct_re.search(s)),
     ]
 
+UNITS = [ # (multiplier, name_singular, name_plural)
+    (1, "second", "seconds"),
+    (60, "minute", "minutes"),
+    (60, "hour", "hours"),
+    (24, "day", "days"),
+    (365.24, "year", "years"),
+    (10, "decade", "decades"),
+    (10, "century", "centuries"),
+    (10, "millenium", "millenia"),
+    ]
+
 def build_parser():
     parser = OptionParser()
     parser.add_option("-d", "--dict", "--dictionary",
@@ -75,6 +86,13 @@ def build_parser():
         dest="verbose",
         default=False,
         )
+    parser.add_option("-g", "--guesses-per-second", "--guesses", "--gps",
+        help="Guesses per second (for additional statistics)",
+        action="store",
+        type="int",
+        dest="guesses_per_second",
+        default=1000,
+        )
     return parser
 
 def main():
@@ -120,6 +138,32 @@ def main():
                 options.length,
                 possibilities,
                 ))
+            seconds = possibilities / float(options.guesses_per_second)
+            last_multiplier, last_name1, last_name_pl = UNITS[0]
+            current_multiplier = last_multiplier
+            for multiplier, name1, name_pl in UNITS:
+                current_multiplier *= multiplier
+                if current_multiplier > seconds:
+                    break
+                last_multiplier = current_multiplier
+                last_name1 = name1
+                last_name_pl = name_pl
+            if options.guesses_per_second == 1:
+                guess = "guess"
+            else:
+                guess = "guesses"
+            dur = seconds / last_multiplier
+            if abs(dur - 1.0) < 0.01: # arbitrary EPSILON
+                last_name = last_name1
+            else:
+                last_name = last_name_pl
+            print("%0.1f %s at %i %s per second" % (
+                dur,
+                last_name,
+                options.guesses_per_second,
+                guess,
+                ))
+
     return EXIT_SUCCESS
 
 if __name__ == "__main__":
