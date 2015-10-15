@@ -3,6 +3,7 @@ import locale
 import random
 import re
 import sys
+from codecs import encode
 from copy import copy
 from optparse import OptionParser
 
@@ -35,6 +36,8 @@ UNITS = [ # (multiplier, name_singular, name_plural)
     (10, "millenium", "millenia"),
     ]
 
+rot13 = lambda s: encode(s, "rot-13")
+
 def build_parser():
     parser = OptionParser()
     parser.add_option("-d", "--dict", "--dictionary",
@@ -43,6 +46,13 @@ def build_parser():
         dest="dictionary",
         metavar="FILE",
         default=DEFAULT_DICT_PATH,
+        )
+    parser.add_option("-x", "--exclude",
+        help="A file containing (optionally ROT13'ed) words to exclude such as profanity",
+        action="store",
+        dest="exclude",
+        metavar="FILE",
+        default=None,
         )
     parser.add_option("-c", "--count",
         help="The number of passwords to output (default: %i)" % DEFAULT_PASSWORD_COUNT,
@@ -107,6 +117,20 @@ def main():
             sys.stderr.write("%s\n" % desc)
             parser.print_help()
             return EXIT_ERROR
+    exclusions = set()
+    if options.exclude:
+        try:
+            f = open(options.exclude)
+        except IOError:
+            sys.stderr.write("Unable to open exclusion file %s\n" % options.exclude)
+        else:
+            try:
+                for word in f:
+                    word = word.strip().lower()
+                    exclusions.add(word)
+                    exclusions.add(rot13(word))
+            finally:
+                f.close()
     try:
         f = open(options.dictionary)
     except IOError:
@@ -117,6 +141,7 @@ def main():
             word_list = []
             for word in f:
                 word = word.rstrip() # get rid of the newline
+                if word in exclusions: continue
                 if options.min <= len(word) <= options.max:
                     # it's of the right length
                     for attr, exclusion_test in EXCLUSIONS:
