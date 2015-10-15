@@ -51,7 +51,7 @@ def build_parser():
         dest="count",
         default=DEFAULT_PASSWORD_COUNT,
         )
-    parser.add_option("-i",
+    parser.add_option("-i", "-n",
         help="The number of words to output (default: %i)" % DEFAULT_NUMBER_OF_WORDS,
         action="store",
         type="int",
