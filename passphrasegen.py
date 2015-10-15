@@ -41,7 +41,7 @@ def build_parser():
         help="The default dictionary to use (default: %s)" % DEFAULT_DICT_PATH,
         action="store",
         dest="dictionary",
-        metavar="PATH",
+        metavar="FILE",
         default=DEFAULT_DICT_PATH,
         )
     parser.add_option("-c", "--count",
