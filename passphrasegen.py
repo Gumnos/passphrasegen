@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-import locale
 import random
 import re
 import sys
 from codecs import encode
-from copy import copy
 from optparse import OptionParser
 
 EXIT_SUCCESS = 0
@@ -22,7 +20,7 @@ EXCLUSIONS = [
     # (name, test)
     ("upper", lambda s: any(c for c in s if c.isupper())),
     ("numeric", lambda s: any(c for c in s if c.isdigit())),
-    ("punct", lambda s: punct_re.search(s)),
+    ("punct", punct_re.search),
     ]
 
 UNITS = [ # (multiplier, name_singular, name_plural)
@@ -82,7 +80,7 @@ def build_parser():
         dest="max",
         default=DEFAULT_MAX,
         )
-    for name, test in EXCLUSIONS:
+    for name, _ in EXCLUSIONS:
         parser.add_option("--include-%s" % name,
             help="Include words containing %s chars" % name,
             action="store_true",
@@ -141,7 +139,8 @@ def main():
             word_list = []
             for word in f:
                 word = word.rstrip() # get rid of the newline
-                if word in exclusions: continue
+                if word in exclusions:
+                    continue
                 if options.min <= len(word) <= options.max:
                     # it's of the right length
                     for attr, exclusion_test in EXCLUSIONS:
@@ -152,7 +151,7 @@ def main():
                         word_list.append(word)
         finally:
             f.close()
-        for i in range(options.count):
+        for _ in range(options.count):
             result = " ".join(random.sample(word_list, options.length))
             print(result)
         if options.verbose:
