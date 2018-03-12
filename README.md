@@ -14,15 +14,20 @@ $ passphrasegen.py --min=6 --max=8 # words must be 6 <= len(word) <= 8
 clearing mushier rivetted planners
 $ passphrasegen.py --help
 Usage: passphrasegen.py [options]
+Usage: passphrasegen.py [options]
 
 Options:
   -h, --help            show this help message and exit
-  -d PATH, --dict=PATH, --dictionary=PATH
+  -d FILE, --dict=FILE, --dictionary=FILE
                         The default dictionary to use (default:
                         /usr/share/dict/words)
+  -x FILE, --exclude=FILE
+                        A file containing (optionally ROT13'ed) words to
+                        exclude such as profanity
   -c COUNT, --count=COUNT
                         The number of passwords to output (default: 1)
-  -n LENGTH             The number of words to output (default: 4)
+  -n LENGTH, --number=LENGTH
+                        The number of words to output (default: 6)
   --min=MIN, --min-len=MIN, --min-length=MIN
                         The minimum length of word to consider (default: 4)
   --max=MAX, --max-len=MAX, --max-length=MAX
@@ -31,6 +36,8 @@ Options:
   --include-numeric     Include words containing numeric chars
   --include-punct       Include words containing punct chars
   -v, --verbose         Report additional statistics
+  -g GUESSES_PER_SECOND, --guesses-per-second=GUESSES_PER_SECOND, --guesses=GUESSES_PER_SECOND, --gps=GUESSES_PER_SECOND
+                        Guesses per second (for additional statistics)
 ```
 
 It assumes the dictionary is located at `/usr/share/dict/words` which it is on most Linux/BSD/Mac boxes.
