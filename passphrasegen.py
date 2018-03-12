@@ -15,6 +15,7 @@ DEFAULT_NUMBER_OF_WORDS = 4
 DEFAULT_DICT_PATH = "/usr/share/dict/words"
 DEFAULT_MIN = 4
 DEFAULT_MAX = 6
+DEFAULT_GUESSES_PER_SECOND = 5000000
 
 EXCLUSIONS = [
     # (name, test)
@@ -98,7 +99,7 @@ def build_parser():
         action="store",
         type="int",
         dest="guesses_per_second",
-        default=1000,
+        default=DEFAULT_GUESSES_PER_SECOND,
         )
     return parser
 
