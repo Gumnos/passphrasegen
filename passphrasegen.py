@@ -11,7 +11,7 @@ EXIT_ERROR = 1
 punct_re = re.compile(r"(?!\w)(?!\s).")
 
 DEFAULT_PASSWORD_COUNT = 1
-DEFAULT_NUMBER_OF_WORDS = 4
+DEFAULT_NUMBER_OF_WORDS = 6
 DEFAULT_DICT_PATH = "/usr/share/dict/words"
 DEFAULT_MIN = 4
 DEFAULT_MAX = 6
