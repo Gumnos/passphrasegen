@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import math
 import random
 import re
 import sys
@@ -181,6 +182,7 @@ def main():
                 last_name = last_name1
             else:
                 last_name = last_name_pl
+            print("%i bits of entropy" % math.log2(possibilities))
             print("%0.1f %s at %i %s per second" % (
                 dur,
                 last_name,
