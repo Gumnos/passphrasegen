@@ -36,6 +36,8 @@ UNITS = [ # (multiplier, name_singular, name_plural)
     (10, "millenium", "millenia"),
     ]
 
+FILL_CHARS = "0123456789,.@#$%*-+="
+
 rot13 = lambda s: encode(s, "rot-13")
 
 def build_parser():
@@ -89,6 +91,18 @@ def build_parser():
             default=False,
             dest=name,
             )
+    parser.add_option("-f", "--fill",
+        help="Use random punct/numbers for fill (rather than spaces)",
+        action="store_true",
+        default=False,
+        dest="fill",
+        )
+    parser.add_option("--fillchars",
+        help="Default fill characters (default: %r)" % FILL_CHARS,
+        action="store",
+        default=FILL_CHARS,
+        dest="fillchars",
+        )
     parser.add_option("-v", "--verbose",
         help="Report additional statistics",
         action="store_true",
@@ -154,13 +168,26 @@ def main():
         finally:
             f.close()
         for _ in range(options.count):
-            result = " ".join(random.sample(word_list, options.length))
+            items = random.sample(word_list, options.length)
+            if options.fill:
+                result = "".join(
+                    word + punctchar
+                    for word, punctchar in zip(
+                        items,
+                        random.choices(options.fillchars, k=len(items))
+                        )
+                    )[:-1] # lop off the last punc char
+            else:
+                result = " ".join(items)
             print(result)
         if options.verbose:
             possibilities = len(word_list) ** options.length
-            print("%i word dictionary, %i word(s) = %i possible" % (
+            if options.fill:
+                possibilities *= (options.length - 1) ** len(options.fillchars)
+            print("%i word dictionary, %i word(s), %s fill = %i possible" % (
                 len(word_list),
                 options.length,
+                len(options.fillchars) if options.fill else "no",
                 possibilities,
                 ))
             seconds = possibilities / float(options.guesses_per_second)
