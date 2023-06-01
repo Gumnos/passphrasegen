@@ -5,16 +5,27 @@ On multiple occasions I've had to generate reasonably strong passwords that stil
 ```
 $ passphrasegen.py # generate one passphrase
 pedant tanker bails creaky
+
 $ passphrasegen.py -c 4 # generate 4 passphrases
 coupes sticks boll fewer
 foul skips phased grader
 mottle mask dipper idols
 horsed cadets digit ruse
+
 $ passphrasegen.py --min=6 --max=8 # words must be 6 <= len(word) <= 8
 clearing mushier rivetted planners
+
+$ passphrasegen.py -n3 --caps
+took Shine nine
+
+$ passphrasegen.py -n3 -f
+side#mind=real
+
+$ passphrasegen.py -n3 --caps -f
+bold%Water3scale
+
 $ passphrasegen.py --help
-Usage: passphrasegen.py [options]
-Usage: passphrasegen.py [options]
+Usage: pass [options]
 
 Options:
   -h, --help            show this help message and exit
@@ -35,6 +46,11 @@ Options:
   --include-upper       Include words containing upper chars
   --include-numeric     Include words containing numeric chars
   --include-punct       Include words containing punct chars
+  --caps                Use random capitalization
+  -f, --fill            Use random punct/numbers for fill (rather than spaces)
+  --fillchars=FILLCHARS
+                        Default fill characters (default:
+                        '0123456789,.@#$%*-+=')
   -v, --verbose         Report additional statistics
   -g GUESSES_PER_SECOND, --guesses-per-second=GUESSES_PER_SECOND, --guesses=GUESSES_PER_SECOND, --gps=GUESSES_PER_SECOND
                         Guesses per second (for additional statistics)
