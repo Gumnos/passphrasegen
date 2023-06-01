@@ -15,10 +15,10 @@ horsed cadets digit ruse
 $ passphrasegen.py --min=6 --max=8 # words must be 6 <= len(word) <= 8
 clearing mushier rivetted planners
 
-$ passphrasegen.py -n3 --caps
+$ passphrasegen.py -n3 --caps # randomly capitalize words
 took Shine nine
 
-$ passphrasegen.py -n3 -f
+$ passphrasegen.py -n3 -f # insert random fill-chars
 side#mind=real
 
 $ passphrasegen.py -n3 --caps -f
