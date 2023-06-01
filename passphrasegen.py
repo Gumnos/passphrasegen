@@ -91,6 +91,12 @@ def build_parser():
             default=False,
             dest=name,
             )
+    parser.add_option("--caps",
+        help="Use random capitalization",
+        action="store_true",
+        default=False,
+        dest="caps",
+        )
     parser.add_option("-f", "--fill",
         help="Use random punct/numbers for fill (rather than spaces)",
         action="store_true",
@@ -169,6 +175,11 @@ def main():
             f.close()
         for _ in range(options.count):
             items = random.sample(word_list, options.length)
+            if options.caps:
+                items = [
+                    item if random.getrandbits(1) else item.title()
+                    for item in items
+                    ]
             if options.fill:
                 result = "".join(
                     word + punctchar
@@ -182,8 +193,11 @@ def main():
             print(result)
         if options.verbose:
             possibilities = len(word_list) ** options.length
+            if options.caps:
+                # not-caps vs caps
+                possibilities *= 2 ** options.length
             if options.fill:
-                possibilities *= (options.length - 1) ** len(options.fillchars)
+                possibilities *= len(options.fillchars) ** (options.length - 1)
             print("%i word dictionary, %i word(s), %s fill = %i possible" % (
                 len(word_list),
                 options.length,
